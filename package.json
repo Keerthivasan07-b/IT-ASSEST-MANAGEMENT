@@ -1,0 +1,24 @@
+{
+  "name": "it-assest-manager",
+  "version": "1.0.0",
+  "description": "",
+  "homepage": "https://github.com/Keerthivasan07-b/IT-ASSEST-MANAGEMENT#readme",
+  "bugs": {
+    "url": "https://github.com/Keerthivasan07-b/IT-ASSEST-MANAGEMENT/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Keerthivasan07-b/IT-ASSEST-MANAGEMENT.git"
+  },
+  "license": "ISC",
+  "author": "",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "docker:build": "docker build -t it-asset-management .",
+    "docker:run": "docker run -d -p 5000:5000 --name it-asset-management-app it-asset-management",
+    "docker:compose": "docker compose up -d --build",
+    "docker:down": "docker compose down"
+  }
+}

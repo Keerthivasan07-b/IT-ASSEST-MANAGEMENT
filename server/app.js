@@ -24,6 +24,20 @@ app.get('/api/health', (req, res) => {
   res.json({ success: true, message: 'IT Asset Management API is running normally.' });
 });
 
+// Serve frontend client build in production / container if available
+const path = require('path');
+const fs = require('fs');
+const clientBuildPath = path.join(__dirname, '../client/dist');
+if (fs.existsSync(clientBuildPath)) {
+  app.use(express.static(clientBuildPath));
+  app.get('*', (req, res, next) => {
+    if (req.path.startsWith('/api')) {
+      return next();
+    }
+    res.sendFile(path.join(clientBuildPath, 'index.html'));
+  });
+}
+
 // Centralized Error Handling Middleware
 app.use(errorHandler);
 
