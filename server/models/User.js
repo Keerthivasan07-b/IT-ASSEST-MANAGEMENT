@@ -29,17 +29,17 @@ const userSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  const salt = await bcrypt.genSalt(10);
-  this.password = await bcrypt.hash(this.password, salt);
-  next();
-});
-
-// Compare password helper method
+// Compare password helper method (unhashed plain text, with fallback for existing hashed passwords)
 userSchema.methods.comparePassword = async function (enteredPassword) {
-  return await bcrypt.compare(enteredPassword, this.password);
+  // Direct plain text comparison
+  if (this.password === enteredPassword) {
+    return true;
+  }
+  // Fallback for any legacy bcrypt hashed passwords in database
+  if (this.password && (this.password.startsWith('$2a$') || this.password.startsWith('$2b$'))) {
+    return await bcrypt.compare(enteredPassword, this.password);
+  }
+  return false;
 };
 
 module.exports = mongoose.model('User', userSchema);
